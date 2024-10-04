@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+<h1>User List</h1>
+<a href="/create">Create new user</a>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}">User Name</td>
+        <td th:text="${user.age}">User Age</td>
+        <td>
+            <a th:href="@{/update/{id}(id=${user.id})}">Edit</a>
+            <a th:href="@{/delete/{id}(id=${user.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
