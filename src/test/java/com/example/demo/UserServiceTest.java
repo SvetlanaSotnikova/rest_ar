@@ -11,29 +11,51 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-
     @Spy
     private UserRepositoryInt userRepositoryInt;
 
-    @Mock
+
+    @Autowired
+    private UserService userServiceAuto;
+    @MockBean
     private UserRepository userRepository;
 
+
+    // пройденный тест
+    @Test
+    public void shouldSaveUser() {
+        User user = new User();
+        user.setId(UUID.randomUUID());
+        user.setName("Kali");
+        user.setAge(50);
+        when(userRepository.save(user)).thenReturn(user);
+
+        User savedUser = userServiceAuto.save(user);
+        assertEquals("Kali", savedUser.getName());
+        verify(userRepository, times(1)).save(user);
+    }
+
+
+    // не пройденные тесты
     @Test
     public void updateUser() {
         User user1 = new User();
